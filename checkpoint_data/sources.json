@@ -1,0 +1,42 @@
+{
+  "copied_inputs": [
+    {
+      "source": "data/LDREF/1000G.EUR.22.bed",
+      "copy": "checkpoint_data/LDREF/1000G.EUR.22.bed",
+      "sha256": "120d3bb674567a5f29b0d5c18f3a8c9b453a0dcad6499dacc57987ed982f25a3"
+    },
+    {
+      "source": "data/LDREF/1000G.EUR.22.bim",
+      "copy": "checkpoint_data/LDREF/1000G.EUR.22.bim",
+      "sha256": "0ac068c747623fbd9fe7773a8b4f6db08739ef290819d8d30be81c6af553cb22"
+    },
+    {
+      "source": "data/LDREF/1000G.EUR.22.fam",
+      "copy": "checkpoint_data/LDREF/1000G.EUR.22.fam",
+      "sha256": "a9d7b791e70aec4903a62d11c44d2a9c7fc9104351523c090c6c7f32dbd0c1ce"
+    },
+    {
+      "source": "data/annotations/chr22_GRCh37_genes.json",
+      "copy": "checkpoint_data/annotations/chr22_GRCh37_genes.json",
+      "sha256": "793f078e43f435bc0f227eafbc16855e8aab046a9cf7e40fc94b9a3b9645338a"
+    },
+    {
+      "source": "data/annotations/chr22_historical_recovered_genes.json",
+      "copy": "checkpoint_data/annotations/chr22_historical_recovered_genes.json",
+      "sha256": "bc676b810534675681d941a30429d09853d7268936ef83c1494a4b41331d25f1"
+    },
+    {
+      "source": "tools/plink2",
+      "copy": "tools/plink2",
+      "sha256": "8053cc185f254302c504d9c658449da4032fcb30a3b5f3a9783bf0397e9b4377"
+    }
+  ],
+  "expression": {
+    "source": "data/expression/GD462.GeneQuantRPKM.50FN.samplename.resk10.txt",
+    "subset": "expression/GEUVADIS_chr22.tsv.gz",
+    "filter": "Chr == 22",
+    "rows": 633,
+    "sample_columns": 462,
+    "sha256": "5c32223e0beb9993173336058328f5414504c997e54a53bf975d2588fb5ffc52"
+  }
+}
