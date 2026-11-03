@@ -1,0 +1,2 @@
+chrom	genes_considered	tested_pairs	p_threshold_chromosome	p_threshold_scan	significant_pairs_chromosome	significant_pairs_scan
+22	633	280105	1.785044893879081e-07	1.785044893879081e-07	1302	1302

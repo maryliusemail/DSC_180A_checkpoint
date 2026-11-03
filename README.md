@@ -1,50 +1,67 @@
-# Project checkpoint — TA check
+# Project checkpoint
 
-Open `project check point.ipynb`, leave **`TA_GRADING = True`**, and run all cells.
+All three questions use **chromosome 22**:
 
-The TA check uses only the inputs in this folder and tests **chromosome 22**:
-
-- **344** matched individuals.
-- **280,105** SNP–gene tests.
-- **1,317** significant pairs after chromosome-wide Bonferroni correction.
-- **72 eGenes** out of **633** tested genes.
-
-## Contents
-
-```text
-checkpoint/
-  project check point.ipynb
-  requirements.txt
-  checkpoint_data/
-    LDREF/          # Copied chromosome 22 BED/BIM/FAM files
-    expression/     # All chromosome 22 expression rows, original sample columns
-    annotations/    # Copied Week 4 GRCh37 gene records
-    sources.json    # Source paths, subset description, and SHA-256 checksums
-  tools/plink2      # Copied executable, macOS ARM build
-  results/ta_chr22/ # Generated results
-```
-
-Original project data remain under `../data/`. The expression subset preserves the original text values for chromosome 22, rather than re-normalizing them. No personal genotype data are included.
+- How many significant SNP–gene pairs?
+- How many eGenes (genes with at least one significant pair)?
+- How many EUR–YRI differences in SNP effects?
 
 ## Run
 
-With Python 3.12 and this folder as the working directory:
+All inputs are included in `checkpoint_data/`. Keep the folder structure intact.
+Use Python 3.12:
 
 ```sh
+python3.12 -m venv .venv
+source .venv/bin/activate
 python -m pip install -r requirements.txt
-python -m jupyter lab "project check point.ipynb"
+chmod +x tools/plink2
+python run_checkpoint.py
 ```
 
-Select the Python environment containing those dependencies, then restart the kernel and run all cells. The default TA check does not require the original project data folder or GENCODE download. Results are written under `results/ta_chr22/`; rerunning replaces them.
+Run these commands from this folder. The bundled PLINK 2 executable is for macOS ARM;
+replace `tools/plink2` with a compatible [build](https://www.cog-genomics.org/plink/2.0/)
+on another platform.
 
-The supplied PLINK executable targets macOS ARM. For another platform, place a compatible PLINK 2 executable at `tools/plink2` and ensure it is executable.
+To run interactively:
 
-## Full analysis
+```sh
+python -m jupyter lab "project_checkpoint_notebook.ipynb"
+```
 
-Set `TA_GRADING = False` and run all cells to test chromosomes 1–22. This mode requires the original project's `../data/` folder, including all 22 LDREF panels, the full expression matrix, and GENCODE v12. Its outputs remain in `../results/project_checkpoint/`. The small TA data folder alone supports chromosome 22 only.
+Select the environment’s kernel and run all cells. Results are saved in
+`results/ta_chr22_pca/` and `results/population_chr22_pca/`.
+The command-line runner also saves `results/executed_checkpoint.ipynb`.
+Rerunning overwrites generated results. A run takes about 1–3 minutes on the tested machine.
 
-The model reproduces Week 4 unadjusted regression; it does not apply PCA correction. Chromosome-wide and scan-wide Bonferroni thresholds coincide when only chromosome 22 is selected.
+## Data and methods
 
-Verified on November 2, 2026: all five cells passed from this folder and from an isolated copy without the original project data. Both runs reproduced the expected chromosome 22 results.
+- `checkpoint_data/LDREF/`: European chromosome 22 genotypes; 344 samples match expression.
+- `checkpoint_data/expression/`: GEUVADIS expression for 633 chromosome 22 genes.
+- `checkpoint_data/annotations/`: Week 4 GRCh37 gene boundaries; test windows extend 500 kb on either side.
+- `checkpoint_data/covariates/eur_loco/`: five European genotype PCs computed without chromosome 22.
+- `checkpoint_data/populations/chr22_EUR_YRI/`: individual genotypes and labels for 358 EUR and 87 YRI samples, with 65,266 shared common SNPs.
 
-A separate local notebook remains at `../notebooks/project check point.ipynb`. It uses the original project data and tools, so moving this submission folder does not break the local copy.
+The course supplied LDREF and expression data. Population genotypes come from
+[1000 Genomes Phase 3](https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/).
+Source details, filtering commands, and checksums are recorded in the `sources.json`
+files under `checkpoint_data/`. The full VCF is not needed to run this folder.
+`scripts/prepare_eur_loco_pcs.py` reproduces European PCs from the full source project;
+the included scores are sufficient for this checkpoint.
+
+Association tests adjust for five PCs. EUR–YRI comparisons test the SNP–population
+interaction with HC3 standard errors. Their PCs use chromosome 22 markers outside
+each gene’s test window, so adjustment is limited. All counts use Bonferroni correction
+at 0.05. Correlated SNPs can produce multiple significant pairs for one signal.
+
+## Results
+
+| Analysis | Tests | Significant |
+|---|---:|---:|
+| SNP–gene pairs | 280,105 | 1,302 |
+| eGenes | 633 genes | 74 |
+| EUR–YRI interactions | 1,137,206 | 341 pairs across 21 genes |
+
+Earlier results without PCA remain in `results/ta_chr22/` and
+`results/population_chr22/`. Changes in discovery counts alone do not establish
+that PCA reduced false positives.

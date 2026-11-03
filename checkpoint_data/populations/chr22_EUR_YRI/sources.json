@@ -1,0 +1,68 @@
+{
+  "source_vcf": "ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz",
+  "source_vcf_sha256": "a90c16c4ff2b3196476d506ae13cb3047fae8670163c7c932c4b0239aef3daf5",
+  "source_metadata": "integrated_call_samples_v3.20130502.ALL.panel.txt",
+  "chromosome": 22,
+  "samples": 445,
+  "population_counts": {
+    "EUR": 358,
+    "YRI": 87
+  },
+  "SNPs_after_pooled_QC": 92657,
+  "SNPs_common_both": 65266,
+  "filters": "biallelic A/C/G/T SNPs, no missing genotypes in 445 individuals, MAF >= 0.05 separately in EUR and YRI; duplicate IDs excluded",
+  "genome_build": "GRCh37",
+  "commands": [
+    [
+      "/Users/mary/Documents/School/DSC 180A project/tools/plink2",
+      "--vcf",
+      "/Users/mary/Documents/School/DSC 180A project/data/genotypes/1000g_phase3/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz",
+      "--const-fid",
+      "0",
+      "--keep",
+      "/Users/mary/Documents/School/DSC 180A project/results/population_chr22_preparation/keep.txt",
+      "--chr",
+      "22",
+      "--snps-only",
+      "just-acgt",
+      "--max-alleles",
+      "2",
+      "--set-all-var-ids",
+      "@:#:$r:$a",
+      "--rm-dup",
+      "exclude-all",
+      "--maf",
+      ".05",
+      "--geno",
+      "0",
+      "--make-bed",
+      "--out",
+      "/Users/mary/Documents/School/DSC 180A project/results/population_chr22_preparation/pooled"
+    ],
+    [
+      "/Users/mary/Documents/School/DSC 180A project/tools/plink2",
+      "--bfile",
+      "/Users/mary/Documents/School/DSC 180A project/results/population_chr22_preparation/pooled",
+      "--export",
+      "A",
+      "--out",
+      "/Users/mary/Documents/School/DSC 180A project/results/population_chr22_preparation/pooled"
+    ],
+    [
+      "/Users/mary/Documents/School/DSC 180A project/tools/plink2",
+      "--bfile",
+      "/Users/mary/Documents/School/DSC 180A project/results/population_chr22_preparation/pooled",
+      "--extract",
+      "/Users/mary/Documents/School/DSC 180A project/results/population_chr22_preparation/common_both.txt",
+      "--make-bed",
+      "--out",
+      "/Users/mary/Documents/School/DSC 180A project/data/populations/chr22_EUR_YRI/chr22_EUR_YRI"
+    ]
+  ],
+  "files": {
+    "chr22_EUR_YRI.bim": "4afa78f0f20c765a24764eda780bb1d0ab95dc7b589798556c0665de0578837a",
+    "chr22_EUR_YRI.bed": "b7c8037c3685a65436d9920d421b479cd38d11a8fcc22a31a845a69504fc21d1",
+    "chr22_EUR_YRI.fam": "3dc90721cd7c4aae1d43212296dcbce194019f7d3fddc8ccd835b898ded1467f",
+    "sample_populations.tsv": "2015745812ed34a077946018e2be42a00dd3fac70f78a08964bb0cf2e586584e"
+  }
+}

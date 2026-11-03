@@ -1,0 +1,14 @@
+{
+  "chromosomes": [
+    22
+  ],
+  "samples": 344,
+  "model": "OLS adjusted for genome-wide LOCO genotype PCs",
+  "n_pcs": 5,
+  "cis_flank_bp": 500000,
+  "tests": 280105,
+  "chromosome_corrected_pairs": 1302,
+  "scan_corrected_pairs": 1302,
+  "scan_p_threshold": 1.785044893879081e-07,
+  "alpha": 0.05
+}

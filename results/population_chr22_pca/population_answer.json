@@ -1,0 +1,15 @@
+{
+  "chromosome": 22,
+  "n_eur": 358,
+  "n_yri": 87,
+  "tested_pairs": 1137206,
+  "significant_interaction_pairs": 341,
+  "genes_with_significant_interaction": 21,
+  "bonferroni_threshold": 4.396740783991643e-08,
+  "alpha": 0.05,
+  "model": "SNP + population + SNP:population + 5 genotype PCs; HC3 normal Wald test",
+  "pca_source": "LD-pruned chromosome 22 markers excluding each gene cis window",
+  "maf_min_each_population": 0.05,
+  "genotype_pcs": 5,
+  "cis_flank_bp": 500000
+}

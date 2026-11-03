@@ -1,0 +1,14 @@
+{
+  "chromosome": 22,
+  "n_eur": 358,
+  "n_yri": 87,
+  "tested_pairs": 1137398,
+  "significant_interaction_pairs": 351,
+  "genes_with_significant_interaction": 23,
+  "bonferroni_threshold": 4.395998586246855e-08,
+  "alpha": 0.05,
+  "model": "SNP + population + SNP:population, HC3 normal Wald test",
+  "maf_min_each_population": 0.05,
+  "genotype_pcs": 0,
+  "cis_flank_bp": 500000
+}

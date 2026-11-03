@@ -1,0 +1,25 @@
+PLINK v2.0.0-b.1-dev M1 (12 Oct 2026)               cog-genomics.org/plink/2.0/
+(C) 2005-2026 S Purcell, C Chang, B Demaille      GNU General Public License v3
+Logging to /Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22_pca/work/pca_markers.log.
+Options in effect:
+  --bfile /Users/mary/Documents/School/DSC_180A_checkpoint/checkpoint_data/populations/chr22_EUR_YRI/chr22_EUR_YRI
+  --indep-pairwise 200 50 0.2
+  --out /Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22_pca/work/pca_markers
+
+Start time: Mon Nov  2 16:47:59 2026
+16384 MiB RAM detected; reserving 8192 MiB for main workspace.
+Using up to 10 threads (change this with --threads).
+445 samples (0 females, 0 males, 445 ambiguous; 445 founders) loaded from
+/Users/mary/Documents/School/DSC_180A_checkpoint/checkpoint_data/populations/chr22_EUR_YRI/chr22_EUR_YRI.fam.
+65266 variants loaded from
+/Users/mary/Documents/School/DSC_180A_checkpoint/checkpoint_data/populations/chr22_EUR_YRI/chr22_EUR_YRI.bim.
+Note: No phenotype data present.
+Calculating allele frequencies... 0%done.
+--indep-pairwise (1 compute thread): 0%50%61719/65266 variants removed.
+Writing...
+Variant lists written to
+/Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22_pca/work/pca_markers.prune.in
+and
+/Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22_pca/work/pca_markers.prune.out
+.
+End time: Mon Nov  2 16:47:59 2026

@@ -1,0 +1,12 @@
+.ipynb_checkpoints/
+results/**/work/
+results/**/all_cis_pairs.tsv.gz
+results/population_chr22/all_interaction_pairs.tsv.gz
+__pycache__/
+results/ta_chr22_pca/work/
+results/ta_chr22_pca/all_cis_pairs.tsv.gz
+results/population_chr22_pca/work/
+results/population_chr22_pca/all_interaction_pairs.tsv.gz
+.venv/
+results/.ipython/
+results/executed_checkpoint.ipynb

@@ -1,0 +1,22 @@
+PLINK v2.0.0-b.1-dev M1 (12 Oct 2026)               cog-genomics.org/plink/2.0/
+(C) 2005-2026 S Purcell, C Chang, B Demaille      GNU General Public License v3
+Logging to /Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22/work/dosages.log.
+Options in effect:
+  --bfile /Users/mary/Documents/School/DSC_180A_checkpoint/checkpoint_data/populations/chr22_EUR_YRI/chr22_EUR_YRI
+  --export A
+  --out /Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22/work/dosages
+
+Start time: Mon Nov  2 15:14:33 2026
+16384 MiB RAM detected; reserving 8192 MiB for main workspace.
+Using up to 10 threads (change this with --threads).
+445 samples (0 females, 0 males, 445 ambiguous; 445 founders) loaded from
+/Users/mary/Documents/School/DSC_180A_checkpoint/checkpoint_data/populations/chr22_EUR_YRI/chr22_EUR_YRI.fam.
+65266 variants loaded from
+/Users/mary/Documents/School/DSC_180A_checkpoint/checkpoint_data/populations/chr22_EUR_YRI/chr22_EUR_YRI.bim.
+Note: No phenotype data present.
+
+--export A pass 1/1: loading... 0%writing... 0%1%2%3%4%5%6%7%8%9%10%11%12%13%14%15%16%17%18%19%20%21%22%23%24%25%26%27%28%29%30%31%32%33%34%35%36%37%38%39%40%41%42%43%44%45%46%47%48%49%50%51%52%53%54%55%56%57%58%59%60%61%62%63%64%65%66%67%68%69%70%71%72%73%74%75%76%77%78%79%80%81%82%83%84%85%86%87%88%89%90%91%92%93%94%95%96%97%98%99% done.
+--export A:
+/Users/mary/Documents/School/DSC_180A_checkpoint/results/population_chr22/work/dosages.raw
+written.
+End time: Mon Nov  2 15:14:34 2026
