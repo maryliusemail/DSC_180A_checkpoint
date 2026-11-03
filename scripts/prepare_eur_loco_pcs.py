@@ -1,5 +1,5 @@
 from pathlib import Path
-import subprocess,json,hashlib
+import os,subprocess,json,hashlib
 import numpy as np,pandas as pd
 import argparse
 parser=argparse.ArgumentParser(description='Compute five genome-wide leave-one-chromosome-out genotype PCs for the expression-matched LDREF cohort.')
@@ -7,7 +7,7 @@ parser.add_argument('--project-root',type=Path,default=Path(__file__).resolve().
 root=parser.parse_args().project_root.resolve()
 work=root/'results/pca_preparation';work.mkdir(parents=True,exist_ok=True)
 out=root/'data/covariates/eur_loco';out.mkdir(parents=True,exist_ok=True)
-plink=root/'tools/plink2'
+plink=root/'tools'/('plink2.exe' if os.name == 'nt' else 'plink2')
 cols=pd.read_csv(root/'data/expression/GD462.GeneQuantRPKM.50FN.samplename.resk10.txt',sep='\t',nrows=0).columns
 fam=pd.read_csv(root/'data/LDREF/1000G.EUR.1.fam',sep=r'\s+',header=None,dtype=str)
 samples=fam.loc[fam[1].isin(cols),[0,1]].copy();samples.columns=['FID','IID'];assert len(samples)==344

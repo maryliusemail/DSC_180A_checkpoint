@@ -9,7 +9,7 @@ All three questions use **chromosome 22**:
 ## Run
 
 All inputs are included in `checkpoint_data/`. Keep the folder structure intact.
-Use Python 3.12:
+Use Python 3.12. On macOS ARM:
 
 ```sh
 python3.12 -m venv .venv
@@ -19,9 +19,18 @@ chmod +x tools/plink2
 python run_checkpoint.py
 ```
 
-Run these commands from this folder. The bundled PLINK 2 executable is for macOS ARM;
-replace `tools/plink2` with a compatible [build](https://www.cog-genomics.org/plink/2.0/)
-on another platform.
+On Windows 64-bit (PowerShell):
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe run_checkpoint.py
+```
+
+Run these commands from this folder. The notebook selects `tools/plink2.exe` on
+Windows and `tools/plink2` on macOS. Both executables are included. Linux requires
+a compatible [PLINK 2 build](https://www.cog-genomics.org/plink/2.0/).
+The full analysis has been tested on macOS ARM; Windows execution has not been tested.
 
 To run interactively:
 
