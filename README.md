@@ -2,7 +2,7 @@
 To run this:
 
 - Open `project_checkpoint_notebook.ipynb`, select the installed Python environment, and run all cells.
-- `ONLY_22 = True` runs all three questions on chromosome 22. Set it to `False` to reproduce the paper’s chromosome 1–22 eQTL and eGene counts. The EUR–YRI comparison always uses chromosome 22. Data for both modes is included.
+- `ONLY_22 = True` runs all three questions on chromosome 22 to save time. Set it to `False` to reproduce the paper’s chromosome 1–22 eQTL and eGene counts. The EUR–YRI comparison always uses chromosome 22. Data for both modes is included.
 
 ## If you want to run from a terminal
 
