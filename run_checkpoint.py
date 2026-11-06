@@ -23,20 +23,16 @@ def main():
 
     notebook = nbformat.read(root / "project_checkpoint_notebook.ipynb", as_version=4)
     shell = InteractiveShell.instance()
-    print("Running chromosome 22...", flush=True)
-    count = 0
-    for index, cell in enumerate(notebook.cells):
-        if cell.cell_type != "code":
-            continue
-        count += 1
+    print("Runing the notebook", flush=True)
+    cells = [cell for cell in notebook.cells if cell.cell_type == "code"]
+    for count, cell in enumerate(cells, 1):
         cell.outputs = []
         cell.execution_count = count
         with capture_output() as captured:
             result = shell.run_cell(cell.source, store_history=True)
-        if captured.stdout:
-            cell.outputs.append(nbformat.v4.new_output("stream", name="stdout", text=captured.stdout))
-        if captured.stderr:
-            cell.outputs.append(nbformat.v4.new_output("stream", name="stderr", text=captured.stderr))
+        for name, value in (("stdout", captured.stdout), ("stderr", captured.stderr)):
+            if value:
+                cell.outputs.append(nbformat.v4.new_output("stream", name=name, text=value))
         for rich in captured.outputs:
             data = {key: base64.b64encode(value).decode() if isinstance(value, bytes) else value
                     for key, value in rich.data.items()}
@@ -44,11 +40,8 @@ def main():
         nbformat.write(notebook, output)
         error = result.error_before_exec or result.error_in_exec
         if error:
-            if captured.stdout:
-                print(captured.stdout, end="", flush=True)
-            if captured.stderr:
-                print(captured.stderr, flush=True)
-            raise RuntimeError(f"Notebook cell {index} failed: {error}") from error
+            print(captured.stdout + captured.stderr, end="", flush=True)
+            raise RuntimeError(f"Code cell {count} failed: {error}") from error
         if count == 5:
             print("eQTL and eGene counts complete.", flush=True)
         elif count == 8:

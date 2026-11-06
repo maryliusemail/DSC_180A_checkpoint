@@ -1,6 +1,27 @@
-"""Covariate-adjusted eQTL regression and genotype-PCA helpers."""
+"""PCA-adjusted eQTL and interaction tests."""
 import numpy as np
 from scipy import stats
+
+
+def _empty_associations():
+    return tuple(np.array([], dtype=int if i < 2 else float) for i in range(5))
+
+
+def _combine_associations(pieces):
+    if not pieces:
+        return _empty_associations()
+    values = tuple(np.concatenate([p[i] for p in pieces]) for i in range(5))
+    order = np.argsort(values[0])
+    return tuple(v[order] for v in values)
+
+
+def _ols_statistics(xx, xy, yy, df):
+    beta = xy / xx
+    se = np.sqrt(np.maximum(yy - xy * beta, 0) / df / xx)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        p = 2 * stats.t.sf(np.abs(beta / se), df)
+    valid = np.isfinite(beta) & np.isfinite(se) & np.isfinite(p)
+    return beta, se, p, valid
 
 
 def covariate_basis(covariates):
@@ -11,36 +32,28 @@ def covariate_basis(covariates):
 
 
 def associate_adjusted(y, X, indices, covariates, cache=None):
-    """Two-sided partial OLS tests, with exact pairwise missingness and residual df."""
+    """OLS SNP tests adjusted for covariates and pairwise missing values."""
     indices = np.asarray(indices, dtype=int)
     if not len(indices):
-        return tuple(np.array([], dtype=int if i < 2 else float) for i in range(5))
+        return _empty_associations()
     if cache is not None and np.isfinite(y).all():
         Q = cache["Q"]
         yr = y - Q @ (Q.T @ y)
         yy = yr @ yr
         if yy <= 1e-12:
-            return tuple(np.array([], dtype=int if i < 2 else float) for i in range(5))
+            return _empty_associations()
         complete = cache["complete"][indices]
         good_indices = indices[complete & (cache["xx"][indices] > 1e-12)]
         pieces = []
         if len(good_indices):
             xx = cache["xx"][good_indices]
             xy = cache["R"][:, good_indices].T @ yr
-            beta = xy / xx
             df = len(y) - covariates.shape[1] - 1
-            se = np.sqrt(np.maximum(yy - xy * beta, 0) / df / xx)
-            with np.errstate(divide="ignore", invalid="ignore"):
-                p = 2 * stats.t.sf(np.abs(beta / se), df)
-            valid = np.isfinite(beta) & np.isfinite(se) & np.isfinite(p)
+            beta, se, p, valid = _ols_statistics(xx, xy, yy, df)
             pieces.append((good_indices[valid], np.full(valid.sum(), len(y), dtype=int), beta[valid], se[valid], p[valid]))
         if (~complete).any():
             pieces.append(associate_adjusted(y, X, indices[~complete], covariates))
-        if not pieces:
-            return tuple(np.array([], dtype=int if i < 2 else float) for i in range(5))
-        values = tuple(np.concatenate([p[i] for p in pieces]) for i in range(5))
-        order = np.argsort(values[0])
-        return tuple(v[order] for v in values)
+        return _combine_associations(pieces)
     x = X[:, indices]
     ok = np.isfinite(x) & np.isfinite(y[:, None]) & np.isfinite(covariates).all(axis=1)[:, None]
     if ok.all():
@@ -68,18 +81,10 @@ def associate_adjusted(y, X, indices, covariates, cache=None):
             continue
         ix = indices[columns[valid]]
         xy = xr[:, valid].T @ yr
-        beta = xy / xx[valid]
         df = n - C.shape[1] - 1
-        se = np.sqrt(np.maximum(yy - xy * beta, 0) / df / xx[valid])
-        with np.errstate(divide="ignore", invalid="ignore"):
-            p = 2 * stats.t.sf(np.abs(beta / se), df)
-        finite = np.isfinite(beta) & np.isfinite(se) & np.isfinite(p)
+        beta, se, p, finite = _ols_statistics(xx[valid], xy, yy, df)
         pieces.append((ix[finite], np.full(finite.sum(), n, dtype=int), beta[finite], se[finite], p[finite]))
-    if not pieces:
-        return tuple(np.array([], dtype=int if i < 2 else float) for i in range(5))
-    values = tuple(np.concatenate([p[i] for p in pieces]) for i in range(5))
-    order = np.argsort(values[0])
-    return tuple(v[order] for v in values)
+    return _combine_associations(pieces)
 
 
 def check_adjusted_pair(y, dosage, covariates, beta, se, p):
@@ -94,7 +99,7 @@ def check_adjusted_pair(y, dosage, covariates, beta, se, p):
 
 
 def relationship_context(X, positions, marker_mask):
-    """Standardized, pruned genotype markers for gene-window-excluded PCA."""
+    """Build a relationship matrix from standardized, pruned markers."""
     Z = X[:, marker_mask].copy()
     f = Z.mean(axis=0) / 2
     if not np.isfinite(Z).all() or not ((f > 0) & (f < 1)).all():
@@ -114,8 +119,7 @@ def population_covariates(context, start, end, is_yri, n_pcs=5):
     K = (context["K"] - removed @ removed.T) / remaining
     values, vectors = np.linalg.eigh(K)
     pcs = vectors[:, np.argsort(values)[::-1][:n_pcs]].copy()
-    # Population intercepts are already in the model. Centering within groups
-    # preserves the model's column space and improves numerical conditioning.
+    # Group centering preserves the fitted model because population intercepts are included.
     for group in (False, True):
         rows = np.asarray(is_yri, dtype=bool) == group
         pcs[rows] -= pcs[rows].mean(axis=0)
@@ -124,7 +128,6 @@ def population_covariates(context, start, end, is_yri, n_pcs=5):
         raise ValueError("A genotype PC is redundant with population membership.")
     pcs /= scale
     C = np.column_stack([np.ones(len(is_yri)), np.asarray(is_yri, float), pcs])
-    covariate_basis(C)
     return C, remaining
 
 
@@ -174,7 +177,7 @@ def check_interaction(y, dosage, is_yri, covariates, difference, se, p):
 
 
 def genotype_adjustment_cache(X, covariates):
-    """Residualize complete-call SNPs once per chromosome, not once per gene."""
+    """Cache adjusted genotypes for SNPs with complete calls."""
     Q = covariate_basis(covariates)
     complete = np.isfinite(X).all(axis=0)
     R = np.zeros_like(X, dtype=float)
