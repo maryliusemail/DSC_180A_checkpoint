@@ -1,13 +1,6 @@
 # Checkpoint 1
 
-<<<<<<< HEAD
 ## Setup
-=======
-Open `project_checkpoint_notebook.ipynb` and run all cells. All of the analysis codes are in the notebook.
-The tags are:
-- `ONLY_22 = True`: means chromosome 22 only.
-- `ONLY_22 = False`: means chromosomes 1–22. The EUR–YRI comparison always uses chromosome 22.
->>>>>>> 7ab10dc985e2a483d4b074e5220bf846d36764ba
 
 Use Python 3.12. From this repository's folder, install the packages:
 
